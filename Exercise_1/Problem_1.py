@@ -16,6 +16,7 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import sounddevice as sd
+import time
 
 def sinFunction(omega):
 
@@ -89,8 +90,19 @@ if(True):
     plt.xlim([0, 0.02])
     plt.plot(t_seq, sum_y)
     plt.ylabel("sum signal")
-
-
-
-
     plt.show()
+
+    play = False
+    if(play):
+        sd.play(y1)
+        time.sleep(2)
+        sd.play(y2)
+        time.sleep(2)
+        sd.play(y3)
+        time.sleep(2)
+        sd.play(y4)
+        time.sleep(2)
+        sd.play(sum_y)
+
+
+
