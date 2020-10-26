@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import sounddevice as sd
 import time
+from scipy.io import wavfile
+from scipy.fftpack import fft
 
 def sinFunction(omega):
 
@@ -51,7 +53,8 @@ y2 = sinFunction(omega2)
 y3 = sinFunction(omega3)
 y4 = sinFunction(omega4)
 
-if(True):
+wannaPlot = False
+if(wannaPlot):
 
     fig = plt.figure()
 
@@ -105,4 +108,23 @@ if(True):
         sd.play(sum_y)
 
 
+    wavfile.write('sumWav.wav',sampling_rate,sum_y)
+sum_y = y1+y2+y3+y4
+dft_sum_signal = fft(sum_y,512)
+x = np.arange(512) #  x_points
 
+
+plt.title("Magnitude")
+plt.plot(x, np.abs(dft_sum_signal))
+print(dft_sum_signal)
+abc = np.abs(dft_sum_signal)
+
+# e.)
+# lookin at first 512 dft samples on magnitude plot. It seems like the first and last amplitude at around 0 and 500 are
+# the lowest amplitude, when the rest between them all max out at 256. Also the phase on second first amplitude around 40 and
+# second last amplitude around 460 have the shortest phase. Theres also a big phase in the middle from around [170 - 340]
+
+
+
+
+plt.show()
