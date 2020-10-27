@@ -20,10 +20,35 @@ from scipy.io import wavfile
 from scipy.fftpack import fft
 
 
-samplerate, data = wavfile.read('audio2.wav')
-plt.plot(data)
-
-plt.show()
+samplerate, data2 = wavfile.read('audio2.wav')
 
 
+# A.) and B.)
+T = 1/samplerate; #time for one sample
+total_samples = len(data2)
+timeAxis = np.arange(total_samples) * T
+plt.xlim([0.5, 1])
+# plt.plot(timeAxis,data2)
+# plt.show()
 # sd.play(data)
+
+
+# C.) and  D.)
+
+
+window = 0.1; # 100ms
+soundLength = 2.5;
+samples_in_window = samplerate / 10; # 2205
+data2_CD = data2[22050: int(11*samples_in_window)]
+
+
+for i in range(11,25):
+    startingSample = i *samples_in_window
+    startingSample = int(startingSample)
+    slicedData = data2[startingSample:startingSample + int(samples_in_window)]
+    print(i," : " ,len(slicedData)," , samples : ",startingSample," - ", int(startingSample + samples_in_window), i*100,"ms - ",(i+1) * 100,"ms")
+
+    #first and only plot
+    if(i == 11):
+        plt.plot(slicedData)
+        plt.show()
