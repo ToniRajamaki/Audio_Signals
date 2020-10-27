@@ -1,15 +1,7 @@
-# Problem 1: Create a synthetic signal as a sum of sinusoids. (1 point)
-
-# a) Create 4 sinusoids of 3 s length, with different amplitude, frequencies 100, 500, 1500,
-# 2500 Hz, different phases, sampled at 8kHz. (Hint: how many samples the signal must
-# have for 3 s length? take into account fs).
-# b) Play and plot the sinusoids
-# c) Add them up to x(t). Plot and play x(t). Write the signal to a wav file.
-# d) Apply DFT (you can use scipy.fftpack.fft function. Select the number of DFT points,
-# e.g., to 512)). Plot magnitude DFT.
-# e ) Observe the components and relationship between nfft and frequency in Hz. (DFT has
-# imaginary values x+iy, where x is amplitude information and y is phase). Report your
-# observation.
+# Bonus problem: (0.5 point)
+# In problem1 downsample the sum of sinusoids x(t) by a factor of 2 using
+# scipy.signal.resample. Write the downsampled signal into wav file. Plot the magnitude
+# DFT and compare it with DFT of x(t). Explain and report your observation.
 
 import numpy as np
 import math
@@ -19,6 +11,7 @@ import sounddevice as sd
 import time
 from scipy.io import wavfile
 from scipy.fftpack import fft
+from scipy.signal import resample
 
 def sinFunction(omega):
 
@@ -44,7 +37,6 @@ omega2 = 2*np.pi*freq2
 omega3 = 2*np.pi*freq3
 omega4 = 2*np.pi*freq4
 
-
 t_seq = np.arange(N) * T  #time stamps for each sample
 
 
@@ -53,78 +45,37 @@ y2 = sinFunction(omega2)
 y3 = sinFunction(omega3)
 y4 = sinFunction(omega4)
 
-wannaPlot = False
-if(wannaPlot):
-
-    fig = plt.figure()
-
-
-    plt.subplot(5,1,1)
-    plt.ylim([-1.5, 1.5])
-    plt.xlim([0, 0.02])
-    plt.plot(t_seq,y1)
-    plt.ylabel("100Hz")
-
-
-    plt.subplot(5, 1, 2)
-    plt.ylim([-1.5, 1.5])
-    plt.xlim([0,0.02])
-    plt.plot(t_seq,y2)
-    plt.ylabel("500Hz")
-
-
-    plt.subplot(5, 1, 3)
-    plt.ylim([-1.5, 1.5])
-    plt.xlim([0,0.02])
-    plt.plot(t_seq,y3)
-    plt.ylabel("1500Hz")
-
-
-    plt.subplot(5, 1, 4)
-    plt.ylim([-1.5, 1.5])
-    plt.xlim([0,0.02])
-    plt.plot(t_seq,y4)
-    plt.ylabel("2500Hz")
-
-    sum_y = y1+y2+y3+y4
-
-    plt.subplot(5, 1, 5)
-    plt.ylim([-5, 5])
-    plt.xlim([0, 0.02])
-    plt.plot(t_seq, sum_y)
-    plt.ylabel("sum signal")
-    plt.show()
-
-    play = False
-    if(play):
-        sd.play(y1)
-        time.sleep(2)
-        sd.play(y2)
-        time.sleep(2)
-        sd.play(y3)
-        time.sleep(2)
-        sd.play(y4)
-        time.sleep(2)
-        sd.play(sum_y)
-
-
-    wavfile.write('sumWav.wav',sampling_rate,sum_y)
-sum_y = y1+y2+y3+y4
-dft_sum_signal = fft(sum_y,512)
 x = np.arange(512) #  x_points
 
+sum_y = y1+y2+y3+y4
+downsampled_sum_y = resample(sum_y,12000)
 
-plt.title("Magnitude")
+
+
+
+
+plt.subplot(2,1,1)
+dft_sum_signal = fft(downsampled_sum_y)
+first_512_samples = downsampled_sum_y[0:512]
+plt.plot(x,np.abs(first_512_samples))
+plt.title(" Downsampled magnitude")
+
+
+
+
+plt.subplot(2,1,2)
+dft_sum_signal = fft(sum_y,512)
 plt.plot(x, np.abs(dft_sum_signal))
-print(dft_sum_signal)
-abc = np.abs(dft_sum_signal)
-
-# e.)
-# lookin at first 512 dft samples on magnitude plot. It seems like the first and last amplitude at around 0 and 500 are
-# the lowest amplitude, when the rest between them all max out at 256. Also the phase on second first amplitude around 40 and
-# second last amplitude around 460 have the shortest phase. Theres also a big phase in the middle from around [170 - 340]
+plt.title("original Magnitude")
 
 
+
+wavfile.write('downsampled_sumWav.wav',4000,downsampled_sum_y)
 
 
 plt.show()
+
+# Bonus problem
+# I managed to downsample the sum signal, i took first 512 samples from the both of them and plotted their magnitudes.
+# the downsampled one seems to be much more denser and there is no phase in the middle. Also when i tried to listen to the
+# wav files, I noticed that the original one is higher.

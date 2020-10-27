@@ -53,7 +53,7 @@ y2 = sinFunction(omega2)
 y3 = sinFunction(omega3)
 y4 = sinFunction(omega4)
 
-wannaPlot = False
+wannaPlot = True
 if(wannaPlot):
 
     fig = plt.figure()
@@ -95,20 +95,22 @@ if(wannaPlot):
     plt.ylabel("sum signal")
     plt.show()
 
-    play = False
-    if(play):
-        sd.play(y1)
-        time.sleep(2)
-        sd.play(y2)
-        time.sleep(2)
-        sd.play(y3)
-        time.sleep(2)
-        sd.play(y4)
-        time.sleep(2)
-        sd.play(sum_y)
 
 
-    wavfile.write('sumWav.wav',sampling_rate,sum_y)
+play = True
+if(play):
+    sd.play(y1)
+    time.sleep(2)
+    sd.play(y2)
+    time.sleep(2)
+    sd.play(y3)
+    time.sleep(2)
+    sd.play(y4)
+    time.sleep(2)
+    sd.play(sum_y)
+
+
+wavfile.write('sumWav.wav',sampling_rate,sum_y)
 sum_y = y1+y2+y3+y4
 dft_sum_signal = fft(sum_y,512)
 x = np.arange(512) #  x_points
