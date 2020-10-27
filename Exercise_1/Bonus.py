@@ -55,9 +55,9 @@ downsampled_sum_y = resample(sum_y,12000)
 
 
 plt.subplot(2,1,1)
-dft_sum_signal = fft(downsampled_sum_y)
-first_512_samples = downsampled_sum_y[0:512]
-plt.plot(x,np.abs(first_512_samples))
+dft_sum_signal = fft(downsampled_sum_y,512)
+
+plt.plot(x,np.abs(dft_sum_signal))
 plt.title(" Downsampled magnitude")
 
 
@@ -77,5 +77,5 @@ plt.show()
 
 # Bonus problem
 # I managed to downsample the sum signal, i took first 512 samples from the both of them and plotted their magnitudes.
-# the downsampled one seems to be much more denser and there is no phase in the middle. Also when i tried to listen to the
+# The original one has more amplitude spikes and the phase in the middles is wider. Also when i tried to listen to the
 # wav files, I noticed that the original one is higher.
