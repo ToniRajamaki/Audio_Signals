@@ -61,6 +61,11 @@ N1 = 145530
 
 
 def p():
+
+    window1 = np.zeros(4410)
+    window2 = np.zeros(4410)
+    window3 = np.zeros(4410)
+
     hanning_whole_data = np.array(0)
     for i in range(0,33):
         # boundaries for data windowing
@@ -85,29 +90,45 @@ def p():
             print(x_axis_for_sliced_data)
             plt.subplot(2, 1, 1)
             plt.xlim([1, 1.1])
-            plt.plot(x_axis_for_sliced_data,windowData)
+            plt.plot(windowData)
             plt.title("Rectangular windowing ( 1000ms - 1100ms )")
 
             plt.subplot(2, 1, 2)
           #  plt.ylim(0,12)
             plt.xlim([1, 1.1])
-            plt.plot(x_axis_for_sliced_data, hanning_windhowData)
+            plt.plot( hanning_windhowData)
             #plt.plot(x_axis_for_sliced_data, np.abs(dft),title = "hanning windowing")
             plt.title("Hanning windowing ( 1000ms - 1100ms )")
             #plt.show()
 
-            plt.figure() ##Trying to plot sum signals
-            x_axis_for_sliced_data = np.arange(i - 2 * samples_in_window1, i -1 * samples_in_window1) * T2
-            plt.subplot(1,3,1)
-            plt.plot(x_axis_for_sliced_data, hanning_windhowData)  #1
+            ##############################################################################################
+            # Normal
+            window1 = audio1[44100:44100 + int(1 * samples_in_window1)]
+            window2 = audio1[int(44100 + 1 * samples_in_window1):44100 + int(2 * samples_in_window1)]
+            window3 = audio1[int(44100 + 2 * samples_in_window1):44100 + int(3 * samples_in_window1)]
+            plt.figure()
 
-            x_axis_for_sliced_data = np.arange(i - 1 * samples_in_window1, i  * samples_in_window1) * T2
-            plt.subplot(1, 3, 2)
-            plt.plot(x_axis_for_sliced_data, hanning_windhowData)  # 2
+            plt.subplot(2,3,1)
+            plt.plot(np.linspace(1.0,1.1,4410),window1)
+            plt.subplot(2, 3, 2)
+            plt.plot(np.linspace(1.1,1.2,4410),window2)
+            plt.title("Three rectangular signals from 1000ms to 1300ms")
+            plt.subplot(2, 3, 3)
+            plt.plot(np.linspace(1.2,1.3,4410),window3)
 
-            x_axis_for_sliced_data = np.arange(i  * samples_in_window1, i + 1 * samples_in_window1) * T2
-            plt.subplot(1, 3, 3)
-            plt.plot(x_axis_for_sliced_data, hanning_windhowData)  # 3
+            #hanning
+            hanning1 = window1 * np.hanning(samples_in_window1)
+            hanning2 = window2 * np.hanning(samples_in_window1)
+            hanning3 = window3 * np.hanning(samples_in_window1)
+            plt.subplot(2,3,4)
+            plt.plot(np.linspace(1.0,1.1,4410),hanning1)  #1
+
+            plt.subplot(2, 3, 5)
+            plt.plot(np.linspace(1.1,1.2,4410),hanning2)  # 2
+            plt.title("Three hanning signals from 1000ms to 1300ms")
+
+            plt.subplot(2, 3, 6)
+            plt.plot( np.linspace(1.2,1.3,4410),hanning3)  # 3
 
 
 
